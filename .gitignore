@@ -1,0 +1,23 @@
+# Go
+/bin
+/tmp
+*.out
+coverage.out
+*.test
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+
+# Node (future client)
+node_modules/
+.next/
+pnpm-lock.yaml
+yarn.lock
+
+# Docker
+pgdata/
