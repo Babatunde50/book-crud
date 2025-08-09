@@ -1,23 +1,48 @@
-# Go
-/bin
-/tmp
+# -------------------------------
+# OS / Editors
+# -------------------------------
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# -------------------------------
+# Env & secrets
+# -------------------------------
+.env
+.env.*
+!.env.example
+
+# -------------------------------
+# Go (server)
+# -------------------------------
+/server/bin/
+/server/tmp/
 *.out
 coverage.out
 *.test
 
-# IDE
-.vscode/
-.idea/
-*.swp
+# If you generate swagger locally and DON'T want to commit it, uncomment:
+# /server/cmd/api/docs/
 
-# OS
-.DS_Store
-
-# Node (future client)
-node_modules/
-.next/
+# -------------------------------
+# Node / Next.js (client)
+# -------------------------------
+/client/node_modules/
+/client/.next/
+/client/.turbo/
+/client/.swc/
+/client/.vercel/
 pnpm-lock.yaml
 yarn.lock
+package-lock.json
 
+# -------------------------------
 # Docker
+# -------------------------------
 pgdata/
+
+# -------------------------------
+# Misc build/packaging
+# -------------------------------
+dist/
