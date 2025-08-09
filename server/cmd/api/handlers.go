@@ -4,9 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 
 	"github.com/Babatunde50/byfood-assessment/server/business/book"
+	"github.com/Babatunde50/byfood-assessment/server/business/urlprocessor"
 	"github.com/Babatunde50/byfood-assessment/server/internal/request"
 	"github.com/Babatunde50/byfood-assessment/server/internal/response"
 	"github.com/Babatunde50/byfood-assessment/server/internal/validator"
@@ -222,4 +225,60 @@ func (app *application) deleteBookHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func validateURLRequest(input URLRequest) validator.Validator {
+	var v validator.Validator
+
+	// URL must not be empty
+	v.CheckField(input.URL != "", "url", "must be provided")
+
+	// Validate URL structure
+	if _, err := url.ParseRequestURI(input.URL); err != nil {
+		v.AddFieldError("url", "must be a valid URL")
+	}
+
+	// Normalize and validate operation
+	op := strings.ToLower(input.Operation)
+	validOps := map[string]bool{
+		"canonical":   true,
+		"redirection": true,
+		"all":         true,
+	}
+	v.CheckField(validOps[op], "operation", "must be one of 'canonical', 'redirection', or 'all'")
+
+	return v
+}
+
+func (app *application) processURLHandler(w http.ResponseWriter, r *http.Request) {
+	var input URLRequest
+
+	err := request.DecodeJSON(w, r, &input)
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	v := validateURLRequest(input)
+	if v.HasErrors() {
+		app.failedValidation(w, r, v)
+		return
+	}
+
+	result, err := app.urlProcessorCore.Process(input.URL, input.Operation)
+	if err != nil {
+		switch {
+		case errors.Is(err, urlprocessor.ErrInvalidOperation):
+			app.badRequest(w, r, err)
+		default:
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	resp := URLResponse{ProcessedURL: result}
+	err = response.JSON(w, http.StatusOK, resp)
+	if err != nil {
+		app.serverError(w, r, err)
+	}
 }

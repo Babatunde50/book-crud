@@ -10,6 +10,7 @@ import (
 
 	"github.com/Babatunde50/byfood-assessment/server/business/book"
 	"github.com/Babatunde50/byfood-assessment/server/business/book/bookdb"
+	"github.com/Babatunde50/byfood-assessment/server/business/urlprocessor"
 	"github.com/Babatunde50/byfood-assessment/server/internal/database"
 	"github.com/Babatunde50/byfood-assessment/server/internal/version"
 	"github.com/lmittmann/tint"
@@ -36,11 +37,12 @@ type config struct {
 }
 
 type application struct {
-	config   config
-	logger   *slog.Logger
-	wg       sync.WaitGroup
-	db       *database.DB
-	bookCore *book.Core
+	config           config
+	logger           *slog.Logger
+	wg               sync.WaitGroup
+	db               *database.DB
+	bookCore         *book.Core
+	urlProcessorCore *urlprocessor.URLProcessor
 }
 
 func run(logger *slog.Logger) error {
@@ -69,12 +71,15 @@ func run(logger *slog.Logger) error {
 	bookStore := bookdb.New(db)
 	bookCore := book.NewCore(bookStore)
 
+	urlProcessorCore := urlprocessor.New()
+
 	app := &application{
-		config:   cfg,
-		logger:   logger,
-		wg:       sync.WaitGroup{},
-		db:       db,
-		bookCore: bookCore,
+		config:           cfg,
+		logger:           logger,
+		wg:               sync.WaitGroup{},
+		db:               db,
+		bookCore:         bookCore,
+		urlProcessorCore: urlProcessorCore,
 	}
 
 	return app.serveHTTP()

@@ -54,3 +54,12 @@ func toBooksResponse(books []book.Book) []BookResponse {
 	}
 	return bookResponses
 }
+
+type URLRequest struct {
+	URL       string `json:"url"`
+	Operation string `json:"operation"`
+}
+
+type URLResponse struct {
+	ProcessedURL string `json:"processed_url"`
+}

@@ -20,5 +20,7 @@ func (app *application) routes() http.Handler {
 	mux.HandlerFunc("PUT", "/books/:id", app.updateBookHandler)
 	mux.HandlerFunc("DELETE", "/books/:id", app.deleteBookHandler)
 
+	mux.HandlerFunc("POST", "/url/process", app.processURLHandler)
+
 	return app.logAccess(app.recoverPanic(mux))
 }
