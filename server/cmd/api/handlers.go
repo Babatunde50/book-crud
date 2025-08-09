@@ -40,6 +40,16 @@ func validateBookRequest(br NewBookRequest) validator.Validator {
 	return v
 }
 
+// @Summary Create a new book
+// @Description Adds a book to the database
+// @Accept json
+// @Tags         books
+// @Produce json
+// @Param book body NewBookRequest true "Book data"
+// @Success 201 {object} book.Book
+// @Failure 400 {object} map[string]string
+// @Failure 422 {object} map[string]interface{}
+// @Router /books [post]
 func (app *application) createBookHandler(w http.ResponseWriter, r *http.Request) {
 	var input NewBookRequest
 
@@ -77,6 +87,12 @@ func (app *application) createBookHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
+// @Summary      List all books
+// @Tags         books
+// @Produce      json
+// @Success      200 {array} BookResponse
+// @Failure      500 {object} map[string]string
+// @Router       /books [get]
 func (app *application) listBooksHandler(w http.ResponseWriter, r *http.Request) {
 	books, err := app.bookCore.QueryAll(r.Context())
 	if err != nil {
@@ -91,6 +107,15 @@ func (app *application) listBooksHandler(w http.ResponseWriter, r *http.Request)
 	}
 }
 
+// @Summary      Get a book by ID
+// @Tags         books
+// @Produce      json
+// @Param        id path string true "Book ID (UUID)"
+// @Success      200 {object} BookResponse
+// @Failure      400 {object} map[string]string
+// @Failure      404 {object} map[string]string
+// @Failure      500 {object} map[string]string
+// @Router       /books/{id} [get]
 func (app *application) showBookHandler(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 
@@ -139,6 +164,18 @@ func validateUpdateBookRequest(br UpdateBookRequest) validator.Validator {
 	return v
 }
 
+// @Summary      Update a book by ID
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path string              true "Book ID (UUID)"
+// @Param        book body UpdateBookRequest   true "Partial fields to update"
+// @Success      200 {object} BookResponse
+// @Failure      400 {object} map[string]string
+// @Failure      404 {object} map[string]string
+// @Failure      422 {object} validator.Validator
+// @Failure      500 {object} map[string]string
+// @Router       /books/{id} [put]
 func (app *application) updateBookHandler(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 
@@ -204,6 +241,14 @@ func (app *application) updateBookHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
+// @Summary      Delete a book by ID
+// @Tags         books
+// @Param        id path string true "Book ID (UUID)"
+// @Success      204
+// @Failure      400 {object} map[string]string
+// @Failure      404 {object} map[string]string
+// @Failure      500 {object} map[string]string
+// @Router       /books/{id} [delete]
 func (app *application) deleteBookHandler(w http.ResponseWriter, r *http.Request) {
 	params := httprouter.ParamsFromContext(r.Context())
 
@@ -250,6 +295,17 @@ func validateURLRequest(input URLRequest) validator.Validator {
 	return v
 }
 
+// @Summary      Process a URL
+// @Description  Canonicalize or redirect-normalize a URL
+// @Tags         url
+// @Accept       json
+// @Produce      json
+// @Param        payload body URLRequest true "URL payload"
+// @Success      200 {object} URLResponse
+// @Failure      400 {object} map[string]string
+// @Failure      422 {object} validator.Validator
+// @Failure      500 {object} map[string]string
+// @Router       /url/process [post]
 func (app *application) processURLHandler(w http.ResponseWriter, r *http.Request) {
 	var input URLRequest
 
