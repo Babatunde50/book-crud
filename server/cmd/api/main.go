@@ -8,6 +8,7 @@ import (
 	"runtime/debug"
 	"sync"
 
+	"github.com/Babatunde50/byfood-assessment/server/internal/database"
 	"github.com/Babatunde50/byfood-assessment/server/internal/version"
 	"github.com/lmittmann/tint"
 )
@@ -26,12 +27,17 @@ func main() {
 type config struct {
 	baseURL  string
 	httpPort int
+	db       struct {
+		dsn         string
+		automigrate bool
+	}
 }
 
 type application struct {
 	config config
 	logger *slog.Logger
 	wg     sync.WaitGroup
+	db     *database.DB
 }
 
 func run(logger *slog.Logger) error {
@@ -39,6 +45,8 @@ func run(logger *slog.Logger) error {
 
 	flag.StringVar(&cfg.baseURL, "base-url", "http://localhost:4748", "base URL for the application")
 	flag.IntVar(&cfg.httpPort, "http-port", 4748, "port to listen on for HTTP requests")
+	flag.StringVar(&cfg.db.dsn, "db-dsn", "user:pass@localhost:5432/db", "postgreSQL DSN")
+	flag.BoolVar(&cfg.db.automigrate, "db-automigrate", true, "run migrations on startup")
 
 	showVersion := flag.Bool("version", false, "display version and exit")
 
@@ -49,10 +57,17 @@ func run(logger *slog.Logger) error {
 		return nil
 	}
 
+	db, err := database.New(cfg.db.dsn, cfg.db.automigrate)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
 	app := &application{
 		config: cfg,
 		logger: logger,
 		wg:     sync.WaitGroup{},
+		db:     db,
 	}
 
 	return app.serveHTTP()
