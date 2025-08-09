@@ -16,6 +16,17 @@ import (
 	"github.com/lmittmann/tint"
 )
 
+// @title           ByFood API
+// @version         1.0
+// @description     Backend assessment API for books and URL processing
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   Babatunde Ololade
+// @contact.email  babatundeololade50@gmail.com
+
+// @host      localhost:4748
+// @BasePath  /
+// @schemes   http
 func main() {
 	logger := slog.New(tint.NewHandler(os.Stdout, &tint.Options{Level: slog.LevelDebug}))
 

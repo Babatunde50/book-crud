@@ -1,0 +1,292 @@
+basePath: /
+definitions:
+  book.Book:
+    properties:
+      author:
+        type: string
+      dateCreated:
+        type: string
+      dateUpdated:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      version:
+        type: integer
+      year:
+        type: integer
+    type: object
+  main.BookResponse:
+    properties:
+      author:
+        type: string
+      date_created:
+        type: string
+      date_updated:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      year:
+        type: integer
+    type: object
+  main.NewBookRequest:
+    properties:
+      author:
+        type: string
+      title:
+        type: string
+      year:
+        type: integer
+    type: object
+  main.URLRequest:
+    properties:
+      operation:
+        type: string
+      url:
+        type: string
+    type: object
+  main.URLResponse:
+    properties:
+      processed_url:
+        type: string
+    type: object
+  main.UpdateBookRequest:
+    properties:
+      author:
+        type: string
+      title:
+        type: string
+      year:
+        type: integer
+    type: object
+  validator.Validator:
+    properties:
+      errors:
+        items:
+          type: string
+        type: array
+      fieldErrors:
+        additionalProperties:
+          type: string
+        type: object
+    type: object
+host: localhost:4748
+info:
+  contact:
+    email: babatundeololade50@gmail.com
+    name: Babatunde Ololade
+  description: Backend assessment API for books and URL processing
+  termsOfService: http://swagger.io/terms/
+  title: ByFood API
+  version: "1.0"
+paths:
+  /books:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.BookResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List all books
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: Adds a book to the database
+      parameters:
+      - description: Book data
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/main.NewBookRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/book.Book'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new book
+      tags:
+      - books
+  /books/{id}:
+    delete:
+      parameters:
+      - description: Book ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a book by ID
+      tags:
+      - books
+    get:
+      parameters:
+      - description: Book ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.BookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a book by ID
+      tags:
+      - books
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Book ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Partial fields to update
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/main.UpdateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.BookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/validator.Validator'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a book by ID
+      tags:
+      - books
+  /url/process:
+    post:
+      consumes:
+      - application/json
+      description: Canonicalize or redirect-normalize a URL
+      parameters:
+      - description: URL payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.URLRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.URLResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/validator.Validator'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Process a URL
+      tags:
+      - url
+schemes:
+- http
+swagger: "2.0"

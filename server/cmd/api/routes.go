@@ -3,7 +3,9 @@ package main
 import (
 	"net/http"
 
+	_ "github.com/Babatunde50/byfood-assessment/server/cmd/api/docs"
 	"github.com/julienschmidt/httprouter"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func (app *application) routes() http.Handler {
@@ -21,6 +23,8 @@ func (app *application) routes() http.Handler {
 	mux.HandlerFunc("DELETE", "/books/:id", app.deleteBookHandler)
 
 	mux.HandlerFunc("POST", "/url/process", app.processURLHandler)
+
+	mux.Handler(http.MethodGet, "/swagger/*any", httpSwagger.WrapHandler)
 
 	return app.logAccess(app.recoverPanic(mux))
 }
