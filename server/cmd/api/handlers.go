@@ -1,11 +1,225 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/Babatunde50/byfood-assessment/server/business/book"
+	"github.com/Babatunde50/byfood-assessment/server/internal/request"
 	"github.com/Babatunde50/byfood-assessment/server/internal/response"
+	"github.com/Babatunde50/byfood-assessment/server/internal/validator"
+	"github.com/google/uuid"
+	"github.com/julienschmidt/httprouter"
 )
 
 func (app *application) status(w http.ResponseWriter, r *http.Request) {
 	_ = response.JSON(w, http.StatusOK, map[string]string{"Status": "OK"})
+}
+
+func validateBookRequest(br NewBookRequest) validator.Validator {
+	var v validator.Validator
+
+	// Title validations
+	v.CheckField(br.Title != "", "title", "title is required")
+	v.CheckField(len(br.Title) <= 100, "title", "title must not exceed 100 characters")
+
+	// Author validations
+	v.CheckField(br.Author != "", "author", "author is required")
+	v.CheckField(len(br.Author) <= 50, "author", "author must not exceed 50 characters")
+
+	// Year validations
+	currentYear := time.Now().Year()
+	v.CheckField(br.Year >= 1, "year", "year must be a positive number")
+	v.CheckField(br.Year <= currentYear, "year", fmt.Sprintf("year cannot be in the future (max %d)", currentYear))
+
+	return v
+}
+
+func (app *application) createBookHandler(w http.ResponseWriter, r *http.Request) {
+	var input NewBookRequest
+
+	err := request.DecodeJSON(w, r, &input)
+
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	v := validateBookRequest(input)
+	if v.HasErrors() {
+		app.failedValidation(w, r, v)
+		return
+	}
+
+	newBook := book.NewBook{
+		Title:  input.Title,
+		Author: input.Author,
+		Year:   input.Year,
+	}
+
+	bk, err := app.bookCore.Create(r.Context(), newBook)
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	err = response.JSON(w, http.StatusCreated, toBookResponse(bk))
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+}
+
+func (app *application) listBooksHandler(w http.ResponseWriter, r *http.Request) {
+	books, err := app.bookCore.QueryAll(r.Context())
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	err = response.JSON(w, http.StatusOK, toBooksResponse(books))
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+}
+
+func (app *application) showBookHandler(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := uuid.Parse(params.ByName("id"))
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	bk, err := app.bookCore.QueryByID(r.Context(), id)
+	if err != nil {
+		switch {
+		case errors.Is(err, book.ErrNotFound):
+			app.notFound(w, r)
+		default:
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	err = response.JSON(w, http.StatusOK, toBookResponse(bk))
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+}
+
+func validateUpdateBookRequest(br UpdateBookRequest) validator.Validator {
+	var v validator.Validator
+
+	if br.Title != nil {
+		v.CheckField(*br.Title != "", "title", "must be provided")
+		v.CheckField(len(*br.Title) <= 100, "title", "must not be more than 100 characters long")
+	}
+
+	if br.Author != nil {
+		v.CheckField(*br.Author != "", "author", "must be provided")
+		v.CheckField(len(*br.Author) <= 50, "author", "must not be more than 50 characters long")
+	}
+
+	if br.Year != nil {
+		v.CheckField(*br.Year >= 1, "year", "must be a valid year")
+		v.CheckField(*br.Year <= time.Now().Year(), "year", "must not be in the future")
+	}
+
+	return v
+}
+
+func (app *application) updateBookHandler(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := uuid.Parse(params.ByName("id"))
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	var input UpdateBookRequest
+	err = request.DecodeJSON(w, r, &input)
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	v := validateUpdateBookRequest(input)
+	if v.HasErrors() {
+		app.failedValidation(w, r, v)
+		return
+	}
+
+	// Step 1: Fetch the existing book
+	existing, err := app.bookCore.QueryByID(r.Context(), id)
+	if err != nil {
+		switch {
+		case errors.Is(err, book.ErrNotFound):
+			app.notFound(w, r)
+		default:
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	// Step 2: Prepare the update
+	updates := book.UpdateBook{}
+
+	if input.Title != nil {
+		updates.Title = input.Title
+	}
+	if input.Author != nil {
+		updates.Author = input.Author
+	}
+	if input.Year != nil {
+		updates.Year = input.Year
+	}
+
+	// Step 3: Apply update
+	updated, err := app.bookCore.Update(r.Context(), existing, updates)
+	if err != nil {
+		switch {
+		case errors.Is(err, book.ErrNotFound):
+			app.notFound(w, r)
+		default:
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	err = response.JSON(w, http.StatusOK, toBookResponse(updated))
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+}
+
+func (app *application) deleteBookHandler(w http.ResponseWriter, r *http.Request) {
+	params := httprouter.ParamsFromContext(r.Context())
+
+	id, err := uuid.Parse(params.ByName("id"))
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	err = app.bookCore.Delete(r.Context(), id)
+	if err != nil {
+		switch {
+		case errors.Is(err, book.ErrNotFound):
+			app.notFound(w, r)
+		default:
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
