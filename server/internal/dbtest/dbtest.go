@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Babatunde50/byfood_assessment/internal/database"
-	"github.com/Babatunde50/byfood_assessment/internal/docker"
+	"github.com/Babatunde50/byfood-assessment/server/internal/database"
+	"github.com/Babatunde50/byfood-assessment/server/internal/docker"
 
 	_ "github.com/lib/pq"
 )
