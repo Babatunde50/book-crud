@@ -5,10 +5,15 @@ import { getBook } from "@/lib/books";
 import { Metadata } from "next";
 import EditButton from "@/components/EditButton";
 import DeleteButton from "@/components/DeleteButton";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: { id: string };
 };
+
+function isUuidV4(id: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
+}
 
 export async function generateMetadata({
   params,
@@ -25,7 +30,11 @@ export async function generateMetadata({
 export default async function BookDetailPage({ params }: Props) {
   const { id } = await params;
 
+  if (!isUuidV4(id)) return notFound(); 
+
   const book = await getBook(id);
+
+  if (!book) return notFound();
 
   return (
     <div className="space-y-6">
