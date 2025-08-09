@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import BookFormModal, { BookFormData } from "@/components/BookFormModal";
 import { parseApiError } from "@/lib/api-error";
+import { useToast } from "@/context/ToastContext";
 
 export function AddButton() {
   const [open, setOpen] = useState(false);
@@ -11,6 +12,7 @@ export function AddButton() {
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
+  const { success, error } = useToast();
 
   const onCreate = async (data: BookFormData) => {
     setFormError(null);
@@ -41,10 +43,12 @@ export function AddButton() {
         setSubmitting(false);
         return;
       }
+      success("Book created");
       setOpen(false);
       router.refresh();
     } catch (err) {
       const parsed = await parseApiError(err);
+      error(parsed.formError ?? "Something went wrong");
       setFormError(parsed.formError);
       setFieldErrors(parsed.fieldErrors);
     } finally {

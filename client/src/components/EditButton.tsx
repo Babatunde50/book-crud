@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { parseApiError } from "@/lib/api-error";
 import { Book } from "@/lib/types";
 import BookFormModal, { BookFormData } from "@/components/BookFormModal";
+import { useToast } from "@/context/ToastContext";
 
 type Props = {
   book: Book;
@@ -16,7 +17,7 @@ export default function EditButton({ book }: Props) {
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
-
+  const { success, error: toastError } = useToast();
   const initial: BookFormData = {
     title: book.title,
     author: book.author,
@@ -66,10 +67,12 @@ export default function EditButton({ book }: Props) {
 
       setOpen(false);
       router.refresh();
+      success("Book updated");
     } catch (err) {
       const { fieldErrors, formError } = await parseApiError(err);
       setFieldErrors(fieldErrors);
       setFormError(formError);
+      toastError(formError ?? "Something went wrong");
     } finally {
       setSubmitting(false);
     }

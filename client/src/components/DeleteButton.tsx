@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { parseApiError } from "@/lib/api-error";
+import { useToast } from "@/context/ToastContext";
 
 type Props = {
   id: string;
@@ -21,6 +22,7 @@ export default function DeleteButton({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { success, error: toastError } = useToast();
   const onDelete = async () => {
     setSubmitting(true);
     setError(null);
@@ -45,9 +47,11 @@ export default function DeleteButton({
       setOpen(false);
       router.push(redirectTo);
       router.refresh();
+      success("Book deleted");
     } catch (err) {
       const { formError } = await parseApiError(err);
       setError(formError);
+      toastError(formError ?? "Something went wrong");
     } finally {
       setSubmitting(false);
     }
