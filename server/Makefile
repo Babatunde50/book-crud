@@ -39,6 +39,12 @@ test/cover:
 upgradeable:
 	@go run github.com/oligot/go-mod-upgrade@latest
 
+## swagger/gen: generate Swagger docs from code annotations
+.PHONY: swagger/gen
+swagger/gen:
+	go run github.com/swaggo/swag/cmd/swag@latest init -g ./cmd/api/main.go -o ./cmd/api/docs
+
+
 # ==================================================================================== #
 # DEVELOPMENT
 # ==================================================================================== #
