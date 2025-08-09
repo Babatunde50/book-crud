@@ -5,7 +5,6 @@ export type Book = {
   year: number;
   date_created: string;
   date_updated: string;
-  version: number;
 };
 
 export type NewBook = {

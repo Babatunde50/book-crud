@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { AddButton } from "@/app/components/AddButton";
+import { AddButton } from "@/components/AddButton";
 import { Metadata } from "next";
 import { getBooks } from "@/lib/books";
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import BookFormModal, { BookFormData } from "@/app/components/BookFormModal";
+import BookFormModal, { BookFormData } from "@/components/BookFormModal";
 import { parseApiError } from "@/lib/api-error";
 
 export function AddButton() {

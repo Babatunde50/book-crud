@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { getBook } from "@/lib/books";
 import { Metadata } from "next";
-import EditButton from "@/app/components/EditButton";
-import DeleteButton from "@/app/components/DeleteButton";
+import EditButton from "@/components/EditButton";
+import DeleteButton from "@/components/DeleteButton";
 
 type Props = {
   params: { id: string };
