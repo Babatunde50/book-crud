@@ -8,6 +8,8 @@ import (
 	"runtime/debug"
 	"sync"
 
+	"github.com/Babatunde50/byfood-assessment/server/business/book"
+	"github.com/Babatunde50/byfood-assessment/server/business/book/bookdb"
 	"github.com/Babatunde50/byfood-assessment/server/internal/database"
 	"github.com/Babatunde50/byfood-assessment/server/internal/version"
 	"github.com/lmittmann/tint"
@@ -34,10 +36,11 @@ type config struct {
 }
 
 type application struct {
-	config config
-	logger *slog.Logger
-	wg     sync.WaitGroup
-	db     *database.DB
+	config   config
+	logger   *slog.Logger
+	wg       sync.WaitGroup
+	db       *database.DB
+	bookCore *book.Core
 }
 
 func run(logger *slog.Logger) error {
@@ -63,11 +66,15 @@ func run(logger *slog.Logger) error {
 	}
 	defer db.Close()
 
+	bookStore := bookdb.New(db)
+	bookCore := book.NewCore(bookStore)
+
 	app := &application{
-		config: cfg,
-		logger: logger,
-		wg:     sync.WaitGroup{},
-		db:     db,
+		config:   cfg,
+		logger:   logger,
+		wg:       sync.WaitGroup{},
+		db:       db,
+		bookCore: bookCore,
 	}
 
 	return app.serveHTTP()
