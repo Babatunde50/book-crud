@@ -5,9 +5,15 @@ import (
 	"net/http"
 
 	_ "github.com/Babatunde50/book-crud/server/cmd/api/docs"
+	"github.com/Babatunde50/book-crud/server/internal/version"
 	"github.com/julienschmidt/httprouter"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
+
+func init() {
+	expvar.NewString("version").Set(version.Get())
+	expvar.NewString("revision").Set(version.GetRevision())
+}
 
 func (app *application) routes() http.Handler {
 	mux := httprouter.New()

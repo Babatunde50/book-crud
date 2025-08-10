@@ -13,12 +13,25 @@ import (
 	"github.com/Babatunde50/book-crud/server/internal/request"
 	"github.com/Babatunde50/book-crud/server/internal/response"
 	"github.com/Babatunde50/book-crud/server/internal/validator"
+	"github.com/Babatunde50/book-crud/server/internal/version"
 	"github.com/google/uuid"
 	"github.com/julienschmidt/httprouter"
 )
 
 func (app *application) status(w http.ResponseWriter, r *http.Request) {
-	_ = response.JSON(w, http.StatusOK, map[string]string{"Status": "OK"})
+
+	data := map[string]string{
+		"status":   "OK",
+		"version":  version.Get(),
+		"revision": version.GetRevision(),
+	}
+
+	err := response.JSON(w, http.StatusOK, data)
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
 }
 
 func validateBookRequest(br NewBookRequest) validator.Validator {
