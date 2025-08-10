@@ -9,10 +9,12 @@
 
 ```bash
 cd server
-# Optional: spin Postgres in Docker and run API with migrations
+
+# Spins up postgres:16 and runs the API with automigrate
 make run/dev
-# or run just the API if DB is already up
-make run
+
+# Or run with your own database:
+make run ARGS='-http-port=4748 -db-dsn="postgres:postgres@localhost:5432/byfood?sslmode=disable" -db-automigrate=true'
 ```
 
 ### 2) Client
