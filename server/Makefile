@@ -91,7 +91,8 @@ build:
 ## run: run the cmd/api application
 .PHONY: run
 run: build
-	/tmp/bin/api
+	/tmp/bin/api $(ARGS)
+
 
 ## run/dev: start postgres container and run dev server
 .PHONY: run/dev
