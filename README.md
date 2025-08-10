@@ -1,4 +1,4 @@
-# ByFood Assessment (Monorepo)
+# Book Library Assessment
 
 - **Server docs:** [`server/README.md`](./server/README.md)
 - **Client docs:** [`client/README.md`](./client/README.md)
@@ -19,6 +19,8 @@ make run
 
 ```bash
 cd client
+# Create `client/.env.local` with:
+#API_BASE_URL=http://localhost:4748
 # (ensure API_BASE_URL=http://localhost:4748)
 npm install
 npm run dev
