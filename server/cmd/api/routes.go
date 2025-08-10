@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	_ "github.com/Babatunde50/byfood-assessment/server/cmd/api/docs"
+	_ "github.com/Babatunde50/book-crud/server/cmd/api/docs"
 	"github.com/julienschmidt/httprouter"
 	httpSwagger "github.com/swaggo/http-swagger"
 )

@@ -12,11 +12,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Babatunde50/byfood-assessment/server/business/book"
-	"github.com/Babatunde50/byfood-assessment/server/business/book/bookdb"
-	"github.com/Babatunde50/byfood-assessment/server/business/urlprocessor"
-	"github.com/Babatunde50/byfood-assessment/server/internal/database"
-	"github.com/Babatunde50/byfood-assessment/server/internal/docker"
+	"github.com/Babatunde50/book-crud/server/business/book"
+	"github.com/Babatunde50/book-crud/server/business/book/bookdb"
+	"github.com/Babatunde50/book-crud/server/business/urlprocessor"
+	"github.com/Babatunde50/book-crud/server/internal/database"
+	"github.com/Babatunde50/book-crud/server/internal/docker"
 	"github.com/google/uuid"
 )
 

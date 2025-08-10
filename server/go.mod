@@ -1,4 +1,4 @@
-module github.com/Babatunde50/byfood-assessment/server
+module github.com/Babatunde50/book-crud/server
 
 go 1.24.6
 
@@ -9,6 +9,8 @@ require (
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/lib/pq v1.10.9
 	github.com/lmittmann/tint v1.1.2
+	github.com/swaggo/http-swagger v1.3.4
+	github.com/swaggo/swag v1.16.6
 	github.com/tomasen/realip v0.0.0-20180522021738-f0c99a92ddce
 )
 
@@ -23,8 +25,6 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe // indirect
-	github.com/swaggo/http-swagger v1.3.4 // indirect
-	github.com/swaggo/swag v1.16.6 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/net v0.38.0 // indirect

@@ -80,7 +80,7 @@ info:
     name: Babatunde Ololade
   description: Backend assessment API for books and URL processing
   termsOfService: http://swagger.io/terms/
-  title: ByFood API
+  title: Book Crud API
   version: "1.0"
 paths:
   /books:

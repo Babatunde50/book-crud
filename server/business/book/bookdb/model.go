@@ -3,7 +3,7 @@ package bookdb
 import (
 	"time"
 
-	"github.com/Babatunde50/byfood-assessment/server/business/book"
+	"github.com/Babatunde50/book-crud/server/business/book"
 	"github.com/google/uuid"
 )
 

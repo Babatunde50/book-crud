@@ -7,8 +7,8 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/Babatunde50/byfood-assessment/server/internal/response"
-	"github.com/Babatunde50/byfood-assessment/server/internal/validator"
+	"github.com/Babatunde50/book-crud/server/internal/response"
+	"github.com/Babatunde50/book-crud/server/internal/validator"
 )
 
 func (app *application) reportServerError(r *http.Request, err error) {

@@ -8,15 +8,15 @@ import (
 	"runtime/debug"
 	"sync"
 
-	"github.com/Babatunde50/byfood-assessment/server/business/book"
-	"github.com/Babatunde50/byfood-assessment/server/business/book/bookdb"
-	"github.com/Babatunde50/byfood-assessment/server/business/urlprocessor"
-	"github.com/Babatunde50/byfood-assessment/server/internal/database"
-	"github.com/Babatunde50/byfood-assessment/server/internal/version"
+	"github.com/Babatunde50/book-crud/server/business/book"
+	"github.com/Babatunde50/book-crud/server/business/book/bookdb"
+	"github.com/Babatunde50/book-crud/server/business/urlprocessor"
+	"github.com/Babatunde50/book-crud/server/internal/database"
+	"github.com/Babatunde50/book-crud/server/internal/version"
 	"github.com/lmittmann/tint"
 )
 
-// @title           ByFood API
+// @title           Book Crud API
 // @version         1.0
 // @description     Backend assessment API for books and URL processing
 // @termsOfService  http://swagger.io/terms/
@@ -87,7 +87,6 @@ func run(logger *slog.Logger) error {
 	app := &application{
 		config:           cfg,
 		logger:           logger,
-		wg:               sync.WaitGroup{},
 		db:               db,
 		bookCore:         bookCore,
 		urlProcessorCore: urlProcessorCore,

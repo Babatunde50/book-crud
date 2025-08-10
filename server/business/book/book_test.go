@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Babatunde50/byfood-assessment/server/business/book"
-	"github.com/Babatunde50/byfood-assessment/server/business/book/bookdb"
-	"github.com/Babatunde50/byfood-assessment/server/internal/dbtest"
+	"github.com/Babatunde50/book-crud/server/business/book"
+	"github.com/Babatunde50/book-crud/server/business/book/bookdb"
+	"github.com/Babatunde50/book-crud/server/internal/dbtest"
 	"github.com/google/uuid"
 )
 

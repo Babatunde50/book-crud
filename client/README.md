@@ -1,6 +1,6 @@
 # Client (Next.js + TypeScript)
 
-Frontend for the ByFood assessment. Built with **Next.js (App Router)**, **TypeScript**, and **Tailwind CSS**.  
+Built with **Next.js (App Router)**, **TypeScript**, and **Tailwind CSS**.  
 It communicates with the Go backend via **Next.js API proxy routes** and uses a lightweight **Toast context** for friendly notifications, plus graceful loading/error states.
 
 > The server docs, setup, and API details live in `server/`. This README focuses on the client application.

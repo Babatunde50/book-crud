@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Babatunde50/byfood-assessment/server/business/urlprocessor"
+	"github.com/Babatunde50/book-crud/server/business/urlprocessor"
 )
 
 func TestURLProcessor_Process(t *testing.T) {

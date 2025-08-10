@@ -8,11 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Babatunde50/byfood-assessment/server/business/book"
-	"github.com/Babatunde50/byfood-assessment/server/business/urlprocessor"
-	"github.com/Babatunde50/byfood-assessment/server/internal/request"
-	"github.com/Babatunde50/byfood-assessment/server/internal/response"
-	"github.com/Babatunde50/byfood-assessment/server/internal/validator"
+	"github.com/Babatunde50/book-crud/server/business/book"
+	"github.com/Babatunde50/book-crud/server/business/urlprocessor"
+	"github.com/Babatunde50/book-crud/server/internal/request"
+	"github.com/Babatunde50/book-crud/server/internal/response"
+	"github.com/Babatunde50/book-crud/server/internal/validator"
 	"github.com/google/uuid"
 	"github.com/julienschmidt/httprouter"
 )

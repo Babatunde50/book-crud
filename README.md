@@ -14,7 +14,7 @@ cd server
 make run/dev
 
 # Or run with your own database:
-make run ARGS='-http-port=4748 -db-dsn="postgres:postgres@localhost:5432/byfood?sslmode=disable" -db-automigrate=true'
+make run ARGS='-http-port=4748 -db-dsn="postgres:postgres@localhost:5432/crud?sslmode=disable" -db-automigrate=true'
 ```
 
 ### 2) Client

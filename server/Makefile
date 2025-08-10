@@ -67,11 +67,6 @@ cover/all:
 upgradeable:
 	@go run github.com/oligot/go-mod-upgrade@latest
 
-## swagger/gen: generate Swagger docs from code annotations
-.PHONY: swagger/gen
-swagger/gen:
-	go run github.com/swaggo/swag/cmd/swag@latest init -g ./cmd/api/main.go -o ./cmd/api/docs
-
 
 # ==================================================================================== #
 # DEVELOPMENT
@@ -103,6 +98,10 @@ run/dev: db/up
 		-db-automigrate=true
 
 		
+## swagger/gen: generate Swagger docs from code annotations
+.PHONY: swagger/gen
+swagger/gen:
+	go run github.com/swaggo/swag/cmd/swag@latest init -g ./cmd/api/main.go -o ./cmd/api/docs
 
 
 # ==================================================================================== #
@@ -148,10 +147,10 @@ migrations/version:
 .PHONY: db/up
 db/up:
 	docker run -d \
-		--name byfood-db \
+		--name crud-db \
 		-e POSTGRES_USER=postgres \
 		-e POSTGRES_PASSWORD=postgres \
-		-e POSTGRES_DB=byfood \
+		-e POSTGRES_DB=crud \
 		-p 5432:5432 \
 		-v pgdata:/var/lib/postgresql/data \
 		postgres:16
@@ -159,9 +158,9 @@ db/up:
 ## db/down: stop and remove the local Postgres container
 .PHONY: db/down
 db/down:
-	docker rm -f byfood-db
+	docker rm -f crud-db
 
 ## db/psql: open psql CLI inside the running container
 .PHONY: db/psql
 db/psql:
-	docker exec -it byfood-db psql -U postgres -d byfood
+	docker exec -it crud-db psql -U postgres -d crud

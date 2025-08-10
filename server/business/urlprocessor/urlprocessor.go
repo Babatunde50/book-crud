@@ -63,7 +63,6 @@ func processRedirection(u *url.URL) string {
 	// Force domain to www.byfood.com
 	u.Host = "www.byfood.com"
 
-	// Lowercase path (important to normalize paths like /FOOD)
 	u.Path = strings.ToLower(u.Path)
 
 	return u.String()

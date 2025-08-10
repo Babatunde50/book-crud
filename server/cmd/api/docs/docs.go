@@ -453,7 +453,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:4748",
 	BasePath:         "/",
 	Schemes:          []string{"http"},
-	Title:            "ByFood API",
+	Title:            "Book Crud API",
 	Description:      "Backend assessment API for books and URL processing",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

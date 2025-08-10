@@ -5,7 +5,7 @@
     "swagger": "2.0",
     "info": {
         "description": "Backend assessment API for books and URL processing",
-        "title": "ByFood API",
+        "title": "Book Crud API",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "Babatunde Ololade",

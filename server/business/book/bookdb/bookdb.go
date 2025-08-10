@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/Babatunde50/byfood-assessment/server/business/book"
-	"github.com/Babatunde50/byfood-assessment/server/internal/database"
+	"github.com/Babatunde50/book-crud/server/business/book"
+	"github.com/Babatunde50/book-crud/server/internal/database"
 	"github.com/google/uuid"
 )
 

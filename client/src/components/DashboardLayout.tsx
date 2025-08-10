@@ -35,7 +35,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="lg:pl-20">
         {/* Topbar */}
         <header className="sticky top-0 z-40 flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow sm:px-6 lg:px-8">
-          <div className="text-lg font-semibold">byFood Library</div>
+          <div className="text-lg font-semibold">Library</div>
         </header>
 
         {/* Main content */}

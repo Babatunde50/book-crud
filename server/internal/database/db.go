@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/Babatunde50/byfood-assessment/server/assets"
+	"github.com/Babatunde50/book-crud/server/assets"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/source/iofs"

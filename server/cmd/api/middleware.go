@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/Babatunde50/byfood-assessment/server/internal/response"
+	"github.com/Babatunde50/book-crud/server/internal/response"
 
 	"github.com/tomasen/realip"
 )
