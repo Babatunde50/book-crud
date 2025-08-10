@@ -1,6 +1,7 @@
 package main
 
 import (
+	"expvar"
 	"net/http"
 
 	_ "github.com/Babatunde50/book-crud/server/cmd/api/docs"
@@ -25,6 +26,8 @@ func (app *application) routes() http.Handler {
 	mux.HandlerFunc("POST", "/url/process", app.processURLHandler)
 
 	mux.Handler(http.MethodGet, "/swagger/*any", httpSwagger.WrapHandler)
+
+	mux.Handler(http.MethodGet, "/debug/vars", expvar.Handler())
 
 	return app.logAccess(app.recoverPanic(mux))
 }
