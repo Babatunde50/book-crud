@@ -9,6 +9,7 @@ help:
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
 
+
 # ==================================================================================== #
 # QUALITY CONTROL
 # ==================================================================================== #
@@ -28,11 +29,38 @@ audit: test
 test:
 	go test -v -race -buildvcs ./...
 
-## test/cover: run all tests and display coverage
+## test/cover: run all tests and display coverage (HTML)
 .PHONY: test/cover
 test/cover:
 	go test -v -race -buildvcs -coverprofile=/tmp/coverage.out ./...
 	go tool cover -html=/tmp/coverage.out
+
+## test/api: run only API (cmd/api) tests
+.PHONY: test/api
+test/api:
+	go test -v -race -buildvcs ./cmd/api
+
+## test/business: run only business-layer tests
+.PHONY: test/business
+test/business:
+	go test -v -race -buildvcs ./business/...
+
+## cover/api: API tests with coverage (func summary)
+.PHONY: cover/api
+cover/api:
+	go test -v -race -buildvcs -coverprofile=/tmp/coverage_api.out ./cmd/api
+	go tool cover -func=/tmp/coverage_api.out
+
+## cover/api/html: open HTML coverage for API
+.PHONY: cover/api/html
+cover/api/html:
+	go tool cover -html=/tmp/coverage_api.out
+
+## cover/all: all packages coverage (func summary)
+.PHONY: cover/all
+cover/all:
+	go test -v -race -buildvcs -coverprofile=/tmp/coverage_all.out ./...
+	go tool cover -func=/tmp/coverage_all.out
 
 ## upgradeable: list direct dependencies that have upgrades available
 .PHONY: upgradeable

@@ -1,4 +1,4 @@
-# ByFood Assessment Backend
+# Server
 
 A Go service that provides:
 - A CRUD **Books API** backed by Postgres
@@ -19,7 +19,7 @@ make run/dev
 # Or run with your own database:
 go run ./cmd/api \
   -http-port=4748 \
-  -db-dsn="postgres://postgres:postgres@localhost:5432/byfood?sslmode=disable" \
+  -db-dsn="postgres:postgres@localhost:5432/byfood?sslmode=disable" \
   -db-automigrate=true
 ```
 
@@ -69,15 +69,24 @@ make migrations/version
 ## Testing
 
 ```bash
-# Business layer tests (e.g., book core, urlprocessor)
-go test ./business/... -v
+# Run everything:
+make test
 
-# API tests (spins a postgres container with internal/docker)
-go test ./cmd/api -v
+# Business layer only:
+make test/business
 
-# Coverage (API package)
-go test -coverprofile=coverage.out ./cmd/api
-go tool cover -func=coverage.out
+# API handlers only (spins a Postgres container via internal/docker in tests):
+make test/api
+
+
+# Coverage (API package – function summary):
+make cover/api
+
+# Open HTML coverage for API:
+make cover/api/html
+
+# Coverage for all packages:
+make cover/all
 ```
 
 ## API
